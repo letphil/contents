@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <p id="recording-status">Ready...</p>
+    <div class="container">
+      <button id="start-record">start</button>
+      <button id="stop-record">stop</button>
+    </div>
+    <div id="audio-clips-container"></div>
+    <script>
+      const startRecordButton = document.getElementById("start-record"),
+        stopRecordButton = document.getElementById("stop-record"),
+        recordingStatusText = document.getElementById("recording-status"),
+        audioClipsContainer = document.getElementById("audio-clips-container");
+
+      let mediaRecorder;
+      let chunks = [];
+
+      startRecordButton.addEventListener("click", async function () {
+        try {
+          recordingStatusText.innerText = "Recording...";
+
+          if (navigator.mediaDevices.getUserMedia) {
+            const constraints = { audio: true };
+            const stream = await navigator.mediaDevices.getUserMedia(
+              constraints
+            );
+
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.start();
+
+            mediaRecorder.ondataavailable = (e) => {
+              chunks.push(e.data);
+            };
+          } else {
+            alert("not available on device");
+          }
+        } catch (error) {
+          console.error("error =", error);
+        }
+      });
+
+      stopRecordButton.addEventListener("click", async function () {
+        try {
+          recordingStatusText.innerText = "Stopped Recording...";
+
+          mediaRecorder.stop();
+
+          mediaRecorder.onstop = async (e) => {
+            const audioClip = document.createElement("audio");
+
+            audioClip.setAttribute("controls", "");
+
+            audioClipsContainer.appendChild(audioClip);
+
+            const blob = new Blob(chunks, { type: "audio/mp3; codecs=opus" });
+
+            const data = new FormData();
+            data.append("audio", blob);
+
+            const res = await axios.post("http://localhost:8888/upload", data);
+
+            console.log("res =", res);
+
+            const audioText = res.data.result;
+
+            const resultText = document.createElement("p");
+
+            resultText.innerText = audioText;
+
+            audioClipsContainer.appendChild(resultText);
+
+            chunks = [];
+
+            // const audioURL = window.URL.createObjectURL(blob);
+            const audioURL = res.data.link;
+            audioClip.src = audioURL;
+          };
+
+          setTimeout(function () {
+            recordingStatusText.innerText = "Ready..";
+          }, 1000);
+        } catch (error) {
+          console.error("error =", error);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <input id="youtube-link-input" />
+
+    <div id="embed-video-container"></div>
+    <button id="get-subtitles">get subtitles</button>
+    <button id="clear">clear</button>
+    <p>results :</p>
+    <p id="subtitles-results"></p>
+    <script>
+      const getSubtitlesButton = document.getElementById("get-subtitles");
+      const subtitlesResults = document.getElementById("subtitles-results");
+      const youtubeLinkInput = document.getElementById("youtube-link-input");
+      const embedVideoContainer = document.getElementById(
+        "embed-video-container"
+      );
+      const embeddedVideo = document.getElementById("embedded-video");
+
+      const youtubeLinkRe =
+        /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/;
+
+      const getSubtitlesFromYoutubeLink = async (link) => {
+        try {
+          const res = await axios.get("http://localhost:8888/get-subtitles", {
+            params: { link: link },
+          });
+
+          return res.data;
+        } catch (error) {
+          console.error("error =", error);
+        }
+      };
+
+      getSubtitlesButton.addEventListener("click", async function () {
+        const youtubeLinkInputValue = youtubeLinkInput.value;
+        if (youtubeLinkInputValue === "")
+          return alert("input value is needed...");
+
+        if (!youtubeLinkRe.test(youtubeLinkInputValue))
+          return alert("not a youtube link..");
+
+        const iframe = document.createElement("iframe");
+        iframe.src =
+          "https://www.youtube.com/embed/" +
+          youtubeLinkInputValue.split("=")[1];
+        // iframe.sandbox = "allow-same-origin";
+        embedVideoContainer.innerHTML = "";
+        embedVideoContainer.appendChild(iframe);
+
+        const results = await getSubtitlesFromYoutubeLink(
+          youtubeLinkInputValue
+        );
+        const subtitles = results.subtitles;
+        subtitlesResults.innerText = subtitles;
+      });
+    </script>
+  </body>
+</html>
