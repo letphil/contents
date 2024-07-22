@@ -1,5 +1,7 @@
 # TODO App
 
+## frontend[]
+
 ```
 just simple full stack todo app. person wll be able to add Todo item
 todo item will be [_id, task, createdAt, updatedAt, deletedAt]
@@ -18,8 +20,11 @@ endpoints ->
 
 will use react with vite
   - axios
+```
 
-will use moleculer.js
+# moleculer.js[http://moleculer.services]
+
+```
   - mongo
   - mongo-express
   - nats
