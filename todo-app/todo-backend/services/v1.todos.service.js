@@ -71,9 +71,9 @@ module.exports = {
 
 		// get tasks
 		getTasks: {
-			rest: "GET /get-tasks/:taskId?",
+			rest: "GET /get-tasks/:todoItemId?",
 			params: {
-				taskId: { type: "string", optional: true },
+				todoItemId: { type: "string", optional: true },
 				status: {
 					type: "string",
 					optional: true,
@@ -82,8 +82,8 @@ module.exports = {
 			},
 			async handler(ctx) {
 				try {
-					if (ctx.params.taskId)
-						return await this.getById(ctx.params.taskId);
+					if (ctx.params.todoItemId)
+						return await this.getById(ctx.params.todoItemId);
 
 					let q = { deletedAt: null };
 
@@ -101,22 +101,20 @@ module.exports = {
 
 		// update task
 		updateTask: {
-			rest: "PUT /update-task/:taskId",
+			rest: "PUT /update-task/:todoItemId",
 			params: {
-				taskId: { type: "string", optional: false },
+				todoItemId: { type: "string", optional: false },
 				task: { type: "string", optional: false },
 			},
 			async handler(ctx) {
 				try {
-					const { taskId, task } = ctx.params;
-					const update = await this.adapter.updateById(taskId, {
-						$set: {
-							task,
-							updatedAt: new Date().toISOString(),
-						},
-					});
+					const { todoItemId, task } = ctx.params;
 
-					if (!update) throw "something went wrong...";
+					const update = await this.updateTodoItem(
+						todoItemId,
+						"task",
+						task
+					);
 
 					return update;
 				} catch (error) {
@@ -126,9 +124,9 @@ module.exports = {
 		},
 
 		updateStatus: {
-			rest: "PUT /update-status/:taskId",
+			rest: "PUT /update-status/:todoItemId",
 			params: {
-				taskId: { type: "string", optional: false },
+				todoItemId: { type: "string", optional: false },
 				status: {
 					type: "string",
 					optional: false,
@@ -137,15 +135,13 @@ module.exports = {
 			},
 			async handler(ctx) {
 				try {
-					const { taskId, status } = ctx.params;
-					const update = await this.adapter.updateById(taskId, {
-						$set: {
-							status,
-							updatedAt: new Date().toISOString(),
-						},
-					});
+					const { todoItemId, status } = ctx.params;
 
-					if (!update) throw "something went wrong...";
+					const update = await this.updateTodoItem(
+						todoItemId,
+						"status",
+						status
+					);
 
 					return update;
 				} catch (error) {
@@ -156,15 +152,15 @@ module.exports = {
 
 		// delete task
 		deleteTask: {
-			rest: "DELETE /delete-task/:taskId",
+			rest: "DELETE /delete-task/:todoItemId",
 			params: {
-				taskId: { type: "string", optional: false },
+				todoItemId: { type: "string", optional: false },
 			},
 			async handler(ctx) {
 				try {
 					const now = new Date().toISOString();
 					const update = await this.updateTodoItem(
-						ctx.params.taskId,
+						ctx.params.todoItemId,
 						"deletedAt",
 						now
 					);
@@ -177,27 +173,23 @@ module.exports = {
 		},
 
 		recoverTask: {
-			rest: "GET /recover-task/:taskId",
+			rest: "GET /recover-task/:todoItemId",
 			params: {
-				taskId: { type: "string", optional: false },
+				todoItemId: { type: "string", optional: false },
 			},
 			async handler(ctx) {
 				try {
-					const getTask = await this.getById(ctx.params.taskId);
+					const getTask = await this.getById(ctx.params.todoItemId);
 					if (!getTask) throw "task not found";
 					if (!getTask.deletedAt) throw "task is not deleted";
 
-					const recover = await this.adapter.updateById(
-						ctx.params.taskId,
-						{
-							$set: {
-								deletedAt: null,
-								updatedAt: new Date().toISOString(),
-							},
-						}
+					const update = await this.updateTodoItem(
+						ctx.params.todoItemId,
+						"deletedAt",
+						null
 					);
 
-					return recover;
+					return update;
 				} catch (error) {
 					throw new MoleculerClientError(error.toString());
 				}

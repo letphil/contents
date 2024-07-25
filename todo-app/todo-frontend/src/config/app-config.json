@@ -1,0 +1,8 @@
+{
+  "SERVER_URL": {
+    "DEV": "http://localhost:3000/api/v1",
+    "PROD": "",
+    "STAGING": ""
+  },
+  "LANG": "en"
+}

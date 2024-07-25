@@ -538,6 +538,9 @@
 				},
 
 				callAction: function (item,fullName) {
+					console.log('item =', item)
+					console.log('fullName =', fullName)
+
 					if(!item.rest) return;
 					item.loading = true;
 					const service = this.services.find(svc => svc.name == fullName);
@@ -552,6 +555,7 @@
 						body = {};
 						params = {};
 						fields.forEach(field => {
+							console.log('field =', field)
 							const value = field.value;
 							if (field.paramType == "body"){
 								body[field.name] = value;
