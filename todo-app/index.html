@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google fonts Bungee and Noto sans fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome 6 CDN-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <title>Todos</title>
+
+    <!-- HTML Inline styling -->
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        transition-duration: 300ms;
+      }
+
+      html {
+        font-family: "Noto sans", sans-serif;
+      }
+
+      h1 {
+        font-family: "Bungee", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        background: #0f172a;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        padding: 24px;
+      }
+
+      header,
+      main,
+      footer {
+        width: 1000px;
+        max-width: 100vh;
+        margin: 0 auto;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        flex: 1;
+      }
+
+      .plusIcon {
+        font-size: 2.5rem;
+        cursor: pointer;
+      }
+
+      .plusIcon:hover {
+        color: cyan;
+      }
+
+      #enterTodo form {
+        display: flex;
+        align-items: stretch;
+        border: 1px solid skyblue;
+      }
+
+      #enterTodo input {
+        background: transparent;
+        outline: none;
+        padding: 12px 8px;
+        color: white;
+        flex: 1;
+        border: none;
+      }
+
+      #enterTodo button {
+        background: skyblue;
+        border: none;
+        outline: none;
+        padding: 0 12px;
+        color: #0f172a;
+        font-family: "Bungee", sans-serif;
+        cursor: pointer;
+      }
+
+      #enterTodo button:hover {
+        background: transparent;
+        color: skyblue;
+      }
+
+      #todos {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .container-todos {
+        padding-left: 25px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Todos</h1>
+      <i class="fa-solid fa-plus plusIcon"></i>
+    </header>
+    <main>
+      <section id="enterTodo">
+        <!-- <form> -->
+        <div
+          style="display: flex; align-items: stretch; border: 1px solid skyblue"
+        >
+          <input type="text" id="textInput" placeholder="Enter todo" />
+          <button onclick="addTodoFromClick()">Add</button>
+        </div>
+        <!-- </form> -->
+      </section>
+      <!-- <section id="todos">
+
+        </section> -->
+      <section class="container-todos">
+        <ul id="todos"></ul>
+      </section>
+    </main>
+    <footer>
+      <p>footer</p>
+    </footer>
+  </body>
+  <script>
+    const todoInput = document.getElementById("textInput");
+    const todosList = document.getElementById("todos");
+    const todos = [];
+
+    // adding addTodo function to keyup event on todoInput
+    todoInput.addEventListener("keyup", addTodoFromInput);
+
+    // on initial load we do this
+    renderTodos();
+
+    // handles add Todo when enter is pressed
+    function addTodoFromInput(event) {
+      const todo = todoInput.value;
+
+      console.log("event =", event);
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (todo === "") return alert("input somethin please");
+        todos.push(todo);
+        renderTodos();
+        todoInput.value = "";
+      }
+    }
+
+    function addTodoFromClick() {
+      const todo = todoInput.value;
+
+      if (todo === "") return alert("input somethin please");
+      todos.push(todo);
+      renderTodos();
+      todoInput.value = "";
+    }
+
+    function renderTodos() {
+      todosList.innerHTML = "";
+      todos.forEach((todo, i) => {
+        console.log("todos =", todos);
+        const todosListItem = document.createElement("li");
+        const todoText = document.createElement("p");
+        todoText.innerText = todo;
+        todosListItem.appendChild(todoText);
+        const removeButton = document.createElement("button");
+        removeButton.addEventListener("click", function () {
+          todos.splice(i, 1);
+          renderTodos();
+          // mdn -> array methods -> splice
+        });
+        removeButton.innerText = "X";
+        todosListItem.appendChild(removeButton);
+
+        const progressDropdown = document.createElement("select");
+
+        progressDropdown.innerHTML = `
+                <option>no started</option>
+                <option>in progress</option>
+                <option>completed</option>
+            `;
+
+        todosListItem.appendChild(progressDropdown);
+
+        // todosListItem.innerText = todo
+        // todosListItem.addEventListener("click", function () {
+        //     todos.splice(i, 1)
+        //     renderTodos()
+        // mdn -> array methods -> splice
+        // })
+        todosList.appendChild(todosListItem);
+
+        // // let currentHTML = todosList.innerHTML
+        // let newHTML = (
+        //     `<div class="todoItem">
+        //         <p>${i + 1}. ${todo}</p>
+        //         <div class="actions"></div>
+        //         <i class="fa-solid fa-pen"></i>
+        //         <i class="fa-regular fa-trash"></i>
+
+        //     </div>`
+        // )
+        // // let amendedHTML = currentHTML + newHTML
+        // /* todosList.innerHTML = amendedHTML */
+        // todosList.innerHTML += newHTML
+      });
+    }
+  </script>
+</html>

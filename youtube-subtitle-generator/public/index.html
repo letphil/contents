@@ -31,7 +31,7 @@
           const res = await axios.get("http://localhost:8888/get-subtitles", {
             params: { link: link },
           });
-
+          console.log("res.data =", res.data);
           return res.data;
         } catch (error) {
           console.error("error =", error);

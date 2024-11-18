@@ -21,7 +21,7 @@ module.exports = {
 		fields: [
 			"_id",
 			"task",
-			"status", // NOT_STARTED, IN_PROGRESS, COMPLETED
+			"status", // NOT_STARTED, IN_PROGRESS, COMPLETED, DELETED
 			"createdAt",
 			"updatedAt",
 			"deletedAt",
@@ -77,7 +77,12 @@ module.exports = {
 				status: {
 					type: "string",
 					optional: true,
-					enum: ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"],
+					enum: [
+						"NOT_STARTED",
+						"IN_PROGRESS",
+						"COMPLETED",
+						"DELETED",
+					],
 				},
 			},
 			async handler(ctx) {
@@ -87,9 +92,12 @@ module.exports = {
 
 					let q = { deletedAt: null };
 
-					if (ctx.params.status) q.status = ctx.params.status;
+					if (ctx.params.status) {
+						if (ctx.params.status === "DELETED") delete q.deletedAt;
+						q.status = ctx.params.status;
+					}
 
-					return this.adapter.find({
+					return await this.adapter.find({
 						query: q,
 						sort: ["-createdAt"],
 					});
@@ -219,11 +227,17 @@ module.exports = {
 		 */
 		async updateTodoItem(_id, field, value) {
 			const now = new Date().toISOString();
+			const updateQ = {
+				[field]: value,
+				updatedAt: now,
+			};
+
+			if (field === "deletedAt" && typeof value === "string") {
+				updateQ.status = "DELETED";
+			}
+
 			const update = await this.adapter.updateById(_id, {
-				$set: {
-					[field]: value,
-					updatedAt: now,
-				},
+				$set: updateQ,
 			});
 
 			return update;

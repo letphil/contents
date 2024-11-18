@@ -10,15 +10,33 @@ export default function AddTodoInput({
   addTodo,
 }: IAddTodoIput) {
   return (
-    <span>
-      <input
-        className="add-todo-input"
-        value={todoItem}
-        onChange={(e) => setTodoItem(e.target.value)}
-      />
-      <button className="button" onClick={addTodo}>
-        add
+    <div
+      style={{
+        borderWidth: 1,
+        borderColor: "black",
+        borderStyle: "solid",
+        justifyContent: "space-between",
+        alignItems: "stretch",
+        display: "flex",
+      }}
+    >
+      <div>
+        <input
+          className="add-todo-input"
+          value={todoItem}
+          onChange={(e) => setTodoItem(e.target.value)}
+        />
+        <button className="button" onClick={addTodo}>
+          add
+        </button>
+      </div>
+      <button
+        onClick={() => {
+          console.log("show deleted");
+        }}
+      >
+        view deleted
       </button>
-    </span>
+    </div>
   );
 }

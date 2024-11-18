@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 
 import { getTodos, addTodo, deleteTodo } from "./services/todos-requests";
-import { Todos } from "./types/todos";
+import { Todo } from "./types/todos";
 import TodoCard from "./components/todo-card";
 import AddTodoInput from "./components/add-todo-input";
 
 export default function App() {
   // state
-  const [todoItems, setTodoItems] = useState<Todos[] | null>(null);
+  const [todoItems, setTodoItems] = useState<Todo[] | null>(null);
   const [todoItem, setTodoItem] = useState<string>("");
+  const [viewDeleted, setViewDeleted] = useState<boolean>(false);
 
   const todoItemsGetRequest = async () => {
-    const todos = await getTodos();
+    const todos = await getTodos(viewDeleted ? "DELETED" : null);
     setTodoItems(todos);
   };
 
@@ -50,6 +51,8 @@ export default function App() {
                 todoItemsGetRequest();
               }
             }}
+            createdAt={new Date(todoItem.createdAt).toLocaleDateString()}
+            updatedAt={new Date(todoItem.updatedAt).toLocaleDateString()}
           />
         );
       })}

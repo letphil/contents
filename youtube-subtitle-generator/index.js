@@ -21,9 +21,12 @@ app.get("/get-subtitles", async function (req, res) {
   try {
     // 1. get query parameter 'link'
     const link = req.query.link;
+    console.log("link =", link);
 
     // get file buffer
     const buffer = await getYoutubeAudio(link);
+
+    console.log("buffer =", buffer);
 
     // send buffer to deepgram api
     const { result, error } = await deepgram.listen.prerecorded.transcribeFile(
@@ -32,6 +35,8 @@ app.get("/get-subtitles", async function (req, res) {
         model: "nova-2",
       }
     );
+
+    console.log("result =", result);
 
     // if error throw
     if (error) throw new Error("something went wrong ...");

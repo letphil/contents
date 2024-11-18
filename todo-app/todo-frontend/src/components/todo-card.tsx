@@ -20,8 +20,10 @@ export default function TodoCard({
     <div className="todo-card">
       <p>{task}</p>
       <p>{status}</p>
-      {createdAt && <p>{createdAt}</p>}
-      {updatedAt && <p>{updatedAt}</p>}
+      <div>
+        {createdAt && <p>created: {createdAt}</p>}
+        {updatedAt && <p>updated: {updatedAt}</p>}
+      </div>
       <div>
         <button className="button" onClick={deleteTodo}>
           X

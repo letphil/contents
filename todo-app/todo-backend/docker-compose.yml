@@ -4,9 +4,10 @@ services:
   api:
     build:
       context: .
-    image: todo-backend
-    env_file: docker-compose.env
+    image: coffee-app-server
+    env_file: .env
     environment:
+      NODEID: "api"
       SERVICES: api
       PORT: 3000
     depends_on:
@@ -18,33 +19,34 @@ services:
     networks:
       - internal
 
-  greeter:
+  auth:
     build:
       context: .
     image: todo-backend
-    env_file: docker-compose.env
+    env_file: .env
     environment:
-      SERVICES: greeter
+      SERVICES: v1.auth
     depends_on:
       - nats
+      - mongo
     networks:
       - internal
 
-  products:
+  todos:
     build:
       context: .
     image: todo-backend
-    env_file: docker-compose.env
+    env_file: .env
     environment:
-      SERVICES: products
+      SERVICES: v1.todos
     depends_on:
-      - mongo
       - nats
+      - mongo
     networks:
       - internal
 
   mongo:
-    image: mongo
+    image: mongo:6
     volumes:
       - data:/data/db
     networks:

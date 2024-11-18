@@ -17,6 +17,8 @@ async function getYoutubeAudio(link) {
     fs.createWriteStream("audio/" + filename)
   );
 
+  console.log("stream =", stream);
+
   return new Promise(function (resolve, reject) {
     stream.on("finish", function () {
       const buffer = fs.readFileSync("./audio/" + filename);
