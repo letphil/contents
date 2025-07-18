@@ -1,0 +1,26 @@
+youtube_top_channel_researcher_task:
+  description: >
+    Research the top YouTube channels in the {topic} niche.
+    Identify and analyze channels similar to {channel_name} ({channel_url}).
+  expected_output: >
+    A list of 10 YouTube channels with their names, URLs, descriptions, and top video URLs.
+  agent: youtube_top_channel_researcher
+  output_file: output/top_channels.json
+
+youtube_channel_analysis_task:
+  description: >
+    Analyze the provided list of YouTube channels.
+    Provide insights on their performance metrics and content strategies.
+  expected_output: >
+    A detailed analysis report of the channels, including performance metrics and content strategies.
+  agent: youtube_channel_analyst
+  output_file: output/channel_analysis.md
+
+youtube_channel_consultant_task:
+  description: >
+    Provide strategic recommendations for improving the performance of the YouTube channel {channel_name} ({channel_url}).
+    Use the analysis report from the previous task.
+  expected_output: >
+    A comprehensive set of recommendations to enhance channel performance, including content strategy, engagement tactics, and growth opportunities.
+  agent: youtube_channel_consultant
+  output_file: output/channel_consultant.md

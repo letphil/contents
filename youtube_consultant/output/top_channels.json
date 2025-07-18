@@ -1,0 +1,58 @@
+{
+  "channels": [
+    {
+      "channel_name": "freeCodeCamp.org",
+      "channel_url": "https://www.youtube.com/c/Freecodecamp",
+      "description": "Learn to code with freeCodeCamp.org, featuring thousands of programming tutorials, articles, and resources.",
+      "top_video_url": "https://www.youtube.com/watch?v=jYQH6uX3C8U"
+    },
+    {
+      "channel_name": "The Coding Train",
+      "channel_url": "https://www.youtube.com/c/TheCodingTrain",
+      "description": "Join Dan Shiffman in his coding adventures while learning about graphics, JavaScript, and creative coding.",
+      "top_video_url": "https://www.youtube.com/watch?v=v1eU8XgRpbI"
+    },
+    {
+      "channel_name": "Fireship",
+      "channel_url": "https://www.youtube.com/c/Fireship",
+      "description": "Explaining complex development topics in a simplified and engaging way through concise videos.",
+      "top_video_url": "https://www.youtube.com/watch?v=PtK482YbOAM"
+    },
+    {
+      "channel_name": "Traversy Media",
+      "channel_url": "https://www.youtube.com/c/TraversyMedia",
+      "description": "Web development tutorials on HTML, CSS, JavaScript, and various frameworks and libraries.",
+      "top_video_url": "https://www.youtube.com/watch?v=UB1O30fR-EE"
+    },
+    {
+      "channel_name": "The Net Ninja",
+      "channel_url": "https://www.youtube.com/c/TheNetNinja",
+      "description": "Offering tutorials on a wide range of web development topics including HTML, CSS, JavaScript, and more.",
+      "top_video_url": "https://www.youtube.com/watch?v=Y1RcIzNQjCg"
+    },
+    {
+      "channel_name": "Programming with Mosh",
+      "channel_url": "https://www.youtube.com/c/programmingwithmosh",
+      "description": "Mosh Hamedani teaches coding in various programming languages, focusing on practical applications.",
+      "top_video_url": "https://www.youtube.com/watch?v=pY9E7YyaYDA"
+    },
+    {
+      "channel_name": "Code with Ania Kubów",
+      "channel_url": "https://www.youtube.com/c/CodeWithAniaKubow",
+      "description": "Tutorials on web development, React, JavaScript, and programming challenges.",
+      "top_video_url": "https://www.youtube.com/watch?v=U8XF6wXMLDex"
+    },
+    {
+      "channel_name": "Nick Chapsas",
+      "channel_url": "https://www.youtube.com/c/NickChapsas",
+      "description": "Nick focuses on .NET, C#, and software development, sharing tips and tutorials.",
+      "top_video_url": "https://www.youtube.com/watch?v=9a1NqBzN4ws"
+    },
+    {
+      "channel_name": "Academind",
+      "channel_url": "https://www.youtube.com/c/AcademindNet",
+      "description": "Maximilian Schwarzmüller teaches web development topics including React, Node.js, Angular, and more.",
+      "top_video_url": "https://www.youtube.com/watch?v=u0_fsbkJ0wE"
+    }
+  ]
+}
