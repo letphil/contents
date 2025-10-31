@@ -6,10 +6,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static("public"));
+// app.use(express.static("uploads"));
 
 // Set up storage engine
 const storage = multer.diskStorage({
-  destination: "./uploads/",
+  destination: "./public/",
   filename: function (req, file, cb) {
     cb(
       null,
